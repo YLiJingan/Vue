@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>options</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+
+<body>
+    <h1>options</h1>
+
+    <div id="app">
+        <h2>propsData</h2>
+        <header></header>
+        <hr>
+        <h2>computed option</h2>
+        <div>{{newPrice}}</div>
+        <div>
+            <ul>
+                <li v-for='item in reversArr'>{{item.title}}--{{item.date}}</li>
+            </ul>
+        </div>
+        <hr>
+        <h2>methods</h2>
+        {{a}}
+        <button @click='add(2,$event)'>ADD</button>
+        <btn @click.native='add(2,$event)'></btn>
+        <hr>
+        <h2>watch选项 监控数据</h2>
+        <div>
+            <p>今日的温度：{{wendu}}度</p>
+            <p>穿衣建议：{{chuanyi}}</p>
+            <p>
+                <button @click='rise(5)'>增加温度</button>
+                <button @click='reduce(5)'>降低温度</button>
+            </p>
+        </div>
+        <hr>
+        <h2>mixins混入操作</h2>
+        <p>混入先执行，原生后执行</p>
+        <hr>
+        <h2>extends</h2>
+        <div></div>
+    </div>
+    <button onclick='app.add(5)'>外部调用构造器里的方法</button>
+    <script type="text/javascript">
+        var header_a = Vue.extend({
+            template: `<p>{{message}}--{{index}}</p>`,
+            data: function () {
+                return {
+                    message: 'Hello world'
+                }
+            },
+            props: ['index']
+        })
+
+        new header_a({ propsData: { index: 12 } }).$mount('header');
+        var arr = [
+            { title: '111', date: '2017/3/26' },
+            { title: '222', date: '2017/3/27' },
+            { title: '333', date: '2017/3/28' },
+            { title: '444', date: '2017/3/29' }
+        ]
+        var btn = {
+            template: `<button>组件ADD</button>`
+        }
+        var addConsole = {
+            updated: function () {
+                console.log('数据发生变化了，改变为' + this.a);
+            }
+        }
+        var extendsObj={
+            updated:function(){
+                console.log('我是扩展的Updated');
+            }
+        }
+        var app = new Vue({
+            el: '#app',
+            data: {
+                price: '100',
+                arr: arr,
+                a: 1,
+                wendu: 10,
+                chuanyi: '夹克长裙'
+            },
+            computed: {
+                newPrice: function () {
+                    return this.price = '￥' + this.price + '元';
+                },
+                reversArr: function () {
+                    return this.arr.reverse();
+                }
+            },
+            methods: {
+                add: function (num, event) {
+                    if (num != '') {
+                        this.a = this.a + num;
+                    } else this.a++;
+                    //console.log(event);
+                },
+                rise: function (num) {
+                    if (num != '') {
+                        this.wendu = this.wendu + num;
+                    } else this.wendu++;
+                },
+                reduce: function (num) {
+                    if (num != '') {
+                        this.wendu = this.wendu - num;
+                    } else this.wendu--;
+                }
+            },
+            components: {
+                'btn': btn
+            },
+            watch: {
+                wendu: function (newVal, oldVal) {
+                    if (newVal >= 26) {
+                        this.chuanyi = '短袖短裙';
+                    } else if (newVal < 26 && newVal > 0) {
+                        this.chuanyi = '我不告诉你';
+                    } else {
+                        this.chuanyi = '羽绒服  羽绒服';
+                    }
+                }
+            },
+            mixins: [addConsole],
+            extends:extendsObj
+        })
+        // app.$watch('wendu',function(newVal,oldVal){   //实例属性
+        // })
+    </script>
+</body>
+
+</html>

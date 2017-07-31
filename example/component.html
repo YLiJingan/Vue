@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>component</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>component</h1>
+    <hr>
+    <yanxiaoguai></yanxiaoguai>
+    <div id="app">
+         <yanxiaoguai></yanxiaoguai>
+         <lili here='Beijing'></lili>
+         <panda></panda>
+         <hr>
+         <component v-bind:is='who'></component>
+         <button @click='change'>CHANGE</button>
+    </div>
+    <script type="text/javascript">
+        var city = {   //子组件
+             template:`<div style='color:blue'>sichuang of China我是构造器外部声明的局部组件</div>`
+        }
+        var panda = {  //父组件
+            template:`<div style='color:orange'>panda from China<hr>
+            <city></city>我是构造器外部声明的局部组件
+            </div>`,
+            components:{
+                'city':city
+            }
+        }
+
+        var componentA = {   
+             template:`<div style='color:blue'>AAA</div>`
+        }
+        var componentB = {   
+             template:`<div style='color:blue'>BBB</div>`
+        }
+        var componentC = {   
+             template:`<div style='color:blue'>CCC</div>`
+        }
+
+        Vue.component('yanxiaoguai',{
+            template:`<h1 style='color:red'>我是全局组件</h1>`
+        })
+        var app = new Vue({
+            el:'#app',
+            data:{
+                who:'componentA'
+            },
+            components:{
+                'lili':{
+                    template:`<h1 style='color:green'>我是局部组件{{here}}</h1>`,
+                    props:['here']
+                },
+                'panda':panda,
+                'componentA':componentA,
+                'componentB':componentB,
+                'componentC':componentC
+            },
+            methods:{
+                change:function(){
+                    if(this.who == 'componentA'){
+                        this.who == 'componentB';
+                    }else if(this.who == 'componentB'){
+                        this.who == 'componentC';
+                    }else{
+                        this.who == 'componentA';
+                    }
+                }  
+            }
+        })
+    </script>
+</body>
+</html>

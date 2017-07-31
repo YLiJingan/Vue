@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.directive</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Vue.directive</h1>
+    <hr>
+    <div id="app">
+        <p v-miao='color'>{{num}}</p>   
+        <button @click='add'>ADD</button>     
+    </div>
+    <script type="text/javascript">
+        // Vue.directive('miao',function(el,binding){
+        //     console.log(el);
+        //     console.log(binding);
+        //     console.log(binding.name);
+        //     console.log(binding.value);
+        //     console.log(binding.expression);
+        //     el.style = 'color:' + binding.value;
+        // });
+
+        Vue.directive('miao',{  //生命周期  钩子函数
+            bind:function(el,binding){
+                console.log('1--bind');
+                el.style = 'color:' + binding.value;
+            },
+            inserted:function(){
+                console.log('2--inserted');
+            },
+            update:function(){
+                console.log('3--uodate');
+            },
+            componentUpdated:function(){
+                console.log('4--componentUpdated');
+            },
+            unbind:function(){
+                console.log('5--unbind');
+            }
+        });
+
+        var app = new Vue({
+            el:'#app',
+            data:{ 
+                num:10,
+                color:'red'
+            },
+            methods:{
+                add:function(){
+                    this.num++;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
