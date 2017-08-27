@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dropzone</title>
+    <link rel="stylesheet" href="../assets/css/dropzone.css">
+    <script tyep="type/javascript" src='../assets/js/dropzone.js'></script>
+</head>
+<body>
+    <div class="dropzone" id="myDropzone">
+    <div class="am-text-success dz-message">
+        将文件拖拽到此处<br>或点此打开文件管理器选择文件
+    </div>
+    <div class="dz-preview dz-file-preview">
+  <div class="dz-details">
+    <div class="dz-filename"><span data-dz-name></span></div>
+    <div class="dz-size" data-dz-size></div>
+    <img data-dz-thumbnail />
+  </div>
+  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+  <div class="dz-success-mark"><span>✔</span></div>
+  <div class="dz-error-mark"><span>✘</span></div>
+  <div class="dz-error-message"><span data-dz-errormessage></span></div>
+</div>
+</div>
+
+<script type="text/javascript">
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone("#myDropzone", {
+        url: "/file/upload",
+        addRemoveLinks: true,
+        method: 'post',
+        filesizeBase: 1024,
+        sending: function(file, xhr, formData) {
+            formData.append("filesize", file.size);
+        },
+        success: function (file, response, e) {
+            var res = JSON.parse(response);
+            if (res.error) {
+                $(file.previewTemplate).children('.dz-error-mark').css('opacity', '1')
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slot</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>slot</h1>
+    <hr>
+    <div id="app">
+         <yan>
+             <span slot='sUrl'>{{yanData.Url}}</span>
+             <span slot='sName'>{{yanData.Name}}</span>
+             <span slot='sSkill'>{{yanData.Skill}}</span>
+         </yan>
+    </div>
+    <template id='tep'>
+        <div>
+            <p>地址：<slot name='sUrl'></slot></p>
+            <p>名称：<slot name='sName'></slot></p>
+            <p>专业：<slot name='sSkill'></slot></p>
+        </div>
+    </template>
+    <script type="text/javascript">
+        var yan = {
+            template:'#tep'
+        }
+        var app = new Vue({
+            el:'#app',
+            data:{
+                yanData:{
+                    Url:'http://www.baidu.com',
+                    Name:'angryyan',
+                    Skill:'web'
+                }
+            },
+            components:{
+                'yan':yan
+            }
+        })
+    </script>
+</body>
+</html>

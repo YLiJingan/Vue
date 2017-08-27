@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>instance</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>instance</h1>
+    <hr>
+
+    <h2>实例方法</h2>
+    <div id='ins'></div>
+    <p><button onclick='destroy()'>销毁</button></p>
+    <p><button onclick='reload()'>刷新</button></p>
+    <p><button onclick='tick()'>数据修改</button></p>
+
+    <hr>
+    <h2>实例事件</h2>
+    <div id="app">
+        {{num}}
+        <button @click='add'>ADD</button>
+    </div>
+    <button onclick='reduce()'>reduce</button>
+    <button onclick='reduceOnce()'>reduceOnce</button>
+    <button onclick='off()'>off</button>
+    <script type="text/javascript">
+        var instance = Vue.extend({
+            template:`<p>{{message}}</p>`,
+            data:function(){
+                return {
+                    message:'Hello,I am instance'
+                }
+            },
+            mounted:function(){
+                console.log('mounted  已经挂载')
+            },
+            destroyed:function(){
+                console.log('destroyed 已经销毁');
+            },
+            updated:function(){
+                console.log('updated 更新之后');
+            }
+        })
+
+        var vm = new instance().$mount('#ins');
+        function destroy(){
+            vm.$destroy();
+        }
+        function reload(){
+            vm.$forceUpdate();
+        }
+        function tick(){
+            vm.message='update message info';
+            vm.$nextTick(function(){
+                console.log('message更新完成后调用');
+            })
+        }
+
+        var app = new Vue({
+            el:'#app',
+            data:{
+                num:1
+            },
+            methods:{
+                add:function(){
+                    this.num++;
+                }
+            }
+        })
+        app.$on('reduce',function(){
+            console.log('执行了reduce方法');
+            this.num--;
+        })
+        app.$once('reduceOnce',function(){   //写方法
+            console.log('只执行一次的方法');
+            this.num--;
+        })
+        function reduce(){                   //emit外部调用
+            app.$emit('reduce');
+        }
+
+        function reduceOnce(){
+            app.$emit('reduceOnce');
+        }
+
+        function off(){
+            app.$off('reduce');
+        }
+    </script>
+</body>
+</html>
